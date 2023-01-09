@@ -64,93 +64,132 @@
         -webkit-overflow-scrolling: touch;
       }
     </style>
-
     
-  </head>
-  <body>
+</head>
+<body>
     
 <header>
-  <div class="collapse bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white"></h4>
+                
+                </div>
+            </div>
         </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <h4 class="text-white"></h4>
-          
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+        <a href="#" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <strong>Burgertify</strong>
+        </a>
+        <div class="d-flex justify-content-end">
+            <div class="btn btn-secondary me-2" id="btnIngresarIndex">Ingresar</div>
+            <div class="btn btn-secondary">Ver Carrito</div>
         </div>
-      </div>
+        
+        </div>
     </div>
-  </div>
-  <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <strong>Burgertify</strong>
-      </a>
-      <div class="d-flex justify-content-end">
-        <div class="btn btn-secondary me-2">Ingresar</div>
-        <div class="btn btn-secondary">Ver Carrito</div>
-      </div>
-      
-    </div>
-  </div>
 </header>
 
 <main>
 
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Album example</h1>
-        <p class="lead text-muted">Something not too short so folks don’t simply skip over it entirely.</p>
-        <p>
-          <a href="#" class="btn btn-primary my-2">Main call to action</a>
-          <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-        </p>
-      </div>
-    </div>
-  </section>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Album example</h1>
 
-  <div class="album py-5 bg-light">
-    <div class="container">
 
-      <div id="menu" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <!-- <div class="col">
-          <div class="card shadow-sm">
-            <img src="" alt="">
+                <!-- <input type="file" id="imgUploaded"> -->
 
-            <div class="card-body">
-              <h4>BURGER LA PIXELONETA</h4>
-              <p class="card-text">Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                </div>
-                <small class="text-muted">9 mins</small>
-              </div>
+                <!-- <button id="getImg">Get img</button> -->
+
+                <!-- <img src="" id="preview" style="width: 300px;"> -->
+
+
+                
+
+
+                <p class="lead text-muted">Something not too short so folks don’t simply skip over it entirely.</p>
+                <p>
+                    <a href="#" class="btn btn-primary my-2">Main call to action</a>
+                    <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+                </p>
             </div>
-          </div>
-        </div> -->
-      </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <form class="row g-3 addNewItemMenuForm">
+            <div class="col-md-4">
+                <label for="imgName" class="form-label">Nombre *</label>
+                <input type="text" class="form-control" id="imgName" required>
+            </div>
+            <div class="col-md-4">
+                <label for="imgDescription" class="form-label">Descripción *</label>
+                <input type="text" class="form-control" id="imgDescription" required>
+            </div>
+            <div class="col-md-4">
+                <label for="imgPrice" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="imgPrice">
+            </div>
+            <div class="col-md-8">
+                <label for="imgUploaded" class="form-label">Imagen *</label>
+                <input type="file" class="form-control" id="imgUploaded" required>
+            </div>
+            <div class="col-md-4">
+                <img src="" id="preview" style="height: 70px;">
+            </div>
+            <div class="col-12 py-4 ">
+                <button class="btn btn-primary" type="submit" id="btnAddNewItemMenu">Cargar al Menú</button>
+            </div>
+        </form>
+    </section>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div id="menu" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <!-- <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="" alt="">
+
+                        <div class="card-body">
+                            <h4>BURGER LA PIXELONETA</h4>
+                            <p class="card-text">Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                </div>
+                                <small class="text-muted">9 mins</small>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
     </div>
-  </div>
 
 </main>
 
 <footer class="text-muted py-5">
-  <div class="container">
-    <p class="float-end mb-1">
-      <a href="#">Back to top</a>
-    </p>
-    <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="../getting-started/introduction/">getting started guide</a>.</p>
-  </div>
+    <div class="container">
+        <p class="float-end mb-1">
+            <a href="#">Back to top</a>
+        </p>
+        <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="../getting-started/introduction/">getting started guide</a>.</p>
+    </div>
 </footer>
 
 <!-- marca error aca -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
       
   </body>
