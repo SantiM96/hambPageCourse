@@ -30,6 +30,7 @@ addEventListener('DOMContentLoaded', (event) => {
         let imgUpload = document.querySelector('#imgUploaded')
         let imgSource
 
+        // Menu default
         let menu = [
             {name: "BURGER LA PIXELONETA", img: "img/burgas/burgerpixeloneta.jpg", price: "1980", description: "Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa"},
             {name: "BURGER DONKEY DONUT", img: "img/burgas/burgerdonkey.jpg", price: "2090", description: "Esta burger tiene: 240gr de carne, doble donuts glaseadas, doble cheddar y doble panceta"},
@@ -39,12 +40,21 @@ addEventListener('DOMContentLoaded', (event) => {
             {name: "BURGER GAME OVER", img: "img/burgas/burgergameover.jpg", price: "1980", description: "Esta burger tiene: 240 gramos de carne. doble panceta, doble cheddar, salsa Little Mac, lechuga, pickles agridulces y cebolla crispy"}
         ]
 
+        // Asegurarnos de que tengamos "menu" en localStorage
+        if (localStorage.getItem('menu')) {
+            menu = JSON.parse(localStorage.getItem('menu'))
+        } else {
+            localStorage.setItem('menu', JSON.stringify(menu))
+        }
+
+
 
         // Funciones
         const printMenu = () => { 
             menuContainer.innerHTML = ''
-            for(item of menu){
-                menuContainer.innerHTML +=`    
+            for (item of menu) {
+                // Usamos template string para inyectar variables en el string (template string => ``)
+                menuContainer.innerHTML += `
                     <div class="col">
                         <div class="card shadow-sm">
                         <img src="${item.img}" alt="">
@@ -52,17 +62,30 @@ addEventListener('DOMContentLoaded', (event) => {
                         <div class="card-body">
                             <h4>${item.name}</h4>
                             <p class="card-text">${item.description}</p>
+                            <p class="fs-3 text-end"><b>$<span class="price" style="width: 50%;">${item.price}</span></b></p>
                             <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-outline-secondary">Agregar al carrito</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary only-admins edits">Editar</button>
                             </div>
                             <small class="text-muted"></small>
                             </div>
                         </div>
                         </div>
                     </div>
-                    `
+                `
+            }
+            if (localStorage.getItem('currentAdmin')) { 
+                btnIngresarIndex.style.display = 'none';
+    
+                // Mostrar elementos de admins a los admins
+                for (const element of document.querySelectorAll(".only-admins")) {
+                    element.classList.remove('only-admins')
+                    element.classList.add('show-admins')
+                    if (element.classList.contains('edits')) { 
+                        element.addEventListener('click', onClickEdit)
+                    }
+                }
             }
         }
         
@@ -79,16 +102,25 @@ addEventListener('DOMContentLoaded', (event) => {
         const addNewItemMenu = e => { 
             e.preventDefault()
             if (imgName.value.trim() != "" && imgDescription.value.trim() != "" && imgPrice.value.trim() != "" && imgSource != "" && imgSource != undefined) { 
-                let objectToAdd = {
-                    name: imgName.value.trim(),
-                    description: imgDescription.value.trim(),
-                    price: imgPrice.value.trim(),
-                    img: imgSource
+                if (localStorage.getItem('currentAdmin')) {
+                    let objectToAdd = {
+                        name: imgName.value.trim(),
+                        description: imgDescription.value.trim(),
+                        price: imgPrice.value.trim(),
+                        img: imgSource
+                    }
+                    menu.push(objectToAdd)
+                    printMenu()
+                    localStorage.setItem('menu', JSON.stringify(menu))
+                    addNewItemMenuForm.reset()
+                    previewImg.src = ''
+                } else { 
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No eres admin'
+                    })
                 }
-                menu.push(objectToAdd)
-                printMenu()
-                addNewItemMenuForm.reset()
-                previewImg.src = ''
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -98,20 +130,82 @@ addEventListener('DOMContentLoaded', (event) => {
             }
         }
 
+        const onClickEdit = e => { 
+            e.preventDefault()
+            
+            // Reemplazar el contenido de los elementos (title y description) a los inputs
+            const clickedCard = e.target.parentNode.parentNode.parentNode.parentNode
+            let title = clickedCard.querySelector('h4')
+            let oldTitle = title.textContent
+            let description = clickedCard.querySelector('.card-text')
+            let price = clickedCard.querySelector('.price')
+            price.style.display = 'inline-block'
+            price.style.marginLeft = '5px'
+            let descriptionHeight = description.clientHeight
+
+            let inputTitle = document.createElement('input')
+            let inputDescription = document.createElement('textarea')
+            let inputPrice = document.createElement('input')
+
+            inputTitle.setAttribute('type', 'text')
+            inputTitle.setAttribute('value', title.textContent)
+            inputTitle.classList.add('form-control')
+            title.innerHTML = ''
+            title.appendChild(inputTitle)
+            
+            inputDescription.setAttribute('type', 'text')
+            inputDescription.innerHTML = description.textContent
+
+            inputDescription.classList.add('form-control')
+            inputDescription.style.height = descriptionHeight + 'px'
+            inputDescription.style.maxHeight = '200px'
+            description.innerHTML = ''
+            description.appendChild(inputDescription)
+
+            inputPrice.setAttribute('type', 'number')
+            inputPrice.setAttribute('value', price.textContent)
+            inputPrice.classList.add('form-control')
+
+            price.innerHTML = ''
+            price.appendChild(inputPrice)
+
+
+            // Cambiar botón de editar
+            const editBtn = clickedCard.querySelector('.edits')
+            editBtn.innerHTML = 'Guardar'
+            editBtn.removeEventListener('click', onClickEdit)
+            editBtn.addEventListener('click', function() { onClickSave(oldTitle, title, description, price) })
+
+        }
+
+        const onClickSave = (oldTitle, title, description, price) => {
+            // Formateamos en nuevo arr (newMenu) los items (comidas) con los cambios aplicados y reemplazamos localStorage
+            let newMenu = []
+            for (let food of menu) {
+                if (food.name === oldTitle) {
+                    food.name = title.querySelector('input').value
+                    food.description = description.querySelector('textarea').value
+                    food.price = price.querySelector('input').value
+                    newMenu.push(food)
+                }  else {
+                    newMenu.push(food)
+                }
+            }
+            localStorage.setItem('menu', JSON.stringify(newMenu))
+            printMenu()
+        }
+
+        
         
         // Listeners
         imgUpload.addEventListener('change', processedImg)
         btnAddNewItemMenu.addEventListener('click', addNewItemMenu)
-
-
+        
         // Esconder botón de ingresar cuando hay un admin logeado
         if (localStorage.getItem('currentAdmin')) { 
             btnIngresarIndex.style.display = 'none';
         }
-
         printMenu()
-
-        
     }
     
    
