@@ -9,7 +9,8 @@
     <title>Album example · Bootstrap v5.2</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
-    
+    <script src="https://kit.fontawesome.com/a647f46baa.js" crossorigin="anonymous"></script>
+
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -70,6 +71,37 @@
 
         .show-admins {
             display: block;
+        }
+
+        .card {
+            position: relative;
+        }
+
+        .fa-xmark {
+            position: absolute;
+            display: none;
+            top: 0px;
+            right: 0px;
+            padding: 5px 10px;
+            border-bottom-left-radius: 15px;
+            color: rgba(255, 2, 2, 0.70);
+            transition: all .3s ease;
+            background: rgb(34,34,34);
+            background-color: rgba(49, 49, 49, 0.438);
+        }
+
+        .fa-xmark::before {
+            display: inline-block;
+            font-size: 30px;
+        }
+
+        .fa-xmark:hover {
+            cursor: pointer;
+            color: rgba(255, 2, 2, 1);
+        }
+
+        .swal2-confirm {
+            margin-left: 10px;
         }
     </style>
     

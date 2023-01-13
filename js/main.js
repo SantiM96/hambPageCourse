@@ -57,20 +57,21 @@ addEventListener('DOMContentLoaded', (event) => {
                 menuContainer.innerHTML += `
                     <div class="col">
                         <div class="card shadow-sm">
-                        <img src="${item.img}" alt="">
-    
-                        <div class="card-body">
-                            <h4>${item.name}</h4>
-                            <p class="card-text">${item.description}</p>
-                            <p class="fs-3 text-end"><b>$<span class="price" style="width: 50%;">${item.price}</span></b></p>
-                            <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Agregar al carrito</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary only-admins edits">Editar</button>
+                            <i class="fa-solid fa-xmark cross"></i>
+                            <img src="${item.img}" alt="">
+        
+                            <div class="card-body">
+                                <h4>${item.name}</h4>
+                                <p class="card-text">${item.description}</p>
+                                <p class="fs-3 text-end"><b>$<span class="price" style="width: 50%;">${item.price}</span></b></p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" disabled>Agregar al carrito</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary only-admins edits">Editar</button>
+                                    </div>
+                                    <small class="text-muted"></small>
+                                </div>
                             </div>
-                            <small class="text-muted"></small>
-                            </div>
-                        </div>
                         </div>
                     </div>
                 `
@@ -139,6 +140,7 @@ addEventListener('DOMContentLoaded', (event) => {
             let oldTitle = title.textContent
             let description = clickedCard.querySelector('.card-text')
             let price = clickedCard.querySelector('.price')
+            let crossBtn = clickedCard.querySelector('.cross')
             price.style.display = 'inline-block'
             price.style.marginLeft = '5px'
             let descriptionHeight = description.clientHeight
@@ -169,6 +171,8 @@ addEventListener('DOMContentLoaded', (event) => {
             price.innerHTML = ''
             price.appendChild(inputPrice)
 
+            // Mostrar Flecha de eliminar
+            showCross(crossBtn, oldTitle)
 
             // Cambiar botón de editar
             const editBtn = clickedCard.querySelector('.edits')
@@ -195,7 +199,56 @@ addEventListener('DOMContentLoaded', (event) => {
             printMenu()
         }
 
-        
+        const showCross = (crossBtn, oldTitle) => {
+            crossBtn.style.display = "block"
+            crossBtn.addEventListener('click', () => { 
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Desea eliminar este producto?',
+                    text: "No podrás revertir esta acción!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si!',
+                    cancelButtonText: 'No!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        swalWithBootstrapButtons.fire(
+                            'Hecho!',
+                            'Su producto ha sido eliminado.',
+                            'success'
+                        )
+
+                        // Borrar producto seleccionado del menu y guardar en localStorage
+                        for (const i in menu) {
+                            if (menu[i].name === oldTitle) {
+                                menu.splice(i, 1)
+                                localStorage.setItem('menu', JSON.stringify(menu))
+                                printMenu()
+                            }
+                        }
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelado',
+                            'Su producto se ha conservado',
+                            'error'
+                        )
+                    }
+                })
+                
+            })
+        }
+
         
         // Listeners
         imgUpload.addEventListener('change', processedImg)
