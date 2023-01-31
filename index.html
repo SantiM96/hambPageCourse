@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.104.2">
-    <title>Album example · Bootstrap v5.2</title>
+    <title>Burgertify</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
     <script src="https://kit.fontawesome.com/a647f46baa.js" crossorigin="anonymous"></script>
@@ -31,16 +31,38 @@
         </div>
         <div class="navbar navbar-light bg-light shadow-sm">
             <div class="container">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> -->
-                <img src="img/logo/hamburguer.png" class="hamb-logo" alt="">
-                <h1><strong>Burgertify</strong></h1>
-            </a>
-            <div class="d-flex justify-content-end">
-                <a href="paginas/login.html" class="btn btn-primary me-2" id="btnIngresarIndex">Ingresar</a>
-                <div class="btn btn-secondary">Ver Carrito</div>
-            </div>
-            
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <img src="img/logo/hamburguer.png" class="hamb-logo" alt="">
+                    <h1><strong>Burgertify</strong></h1>
+                </a>
+                <div class="d-flex"> 
+                    <div class="mt-3">
+                        <a href="paginas/login.html" class="btn btn-success me-2" id="btnIngresarIndex">Ingresar</a>
+                    </div>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn cart-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <img src="img/logo/carrito.png" class="cart-logo" alt=""> 
+                    </button>
+                    
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Productos en el carrito</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger">Vaciar carrito</button>
+                                    <button type="button" class="btn btn-success">Finalizar compra</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
             </div>
         </div>
     </header>
@@ -112,12 +134,12 @@
     <footer class="text-muted py-5">
         <div class="container">
             <p class="float-end mb-1">
-                <a href="#">Back to top</a>
+                <a href="#"></a>
             </p>
-            <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-            <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="../getting-started/introduction/">getting started guide</a>.</p>
+            <p class="mb-1"> </p>
+            <p class="mb-0"> <a href="/"></a> <a href=""></a>.</p>
         </div>
-    </footer>
+    </footer>   
 
 <!-- marca error aca -->
     <script src="js/bootstrap.min.js"></script>

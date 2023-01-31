@@ -32,12 +32,12 @@ addEventListener('DOMContentLoaded', (event) => {
 
         // Menu default
         let menu = [
-            {name: "BURGER LA PIXELONETA", img: "img/burgas/burgerpixeloneta.jpg", price: "1980", description: "Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa"},
-            {name: "BURGER DONKEY DONUT", img: "img/burgas/burgerdonkey.jpg", price: "2090", description: "Esta burger tiene: 240gr de carne, doble donuts glaseadas, doble cheddar y doble panceta"},
-            {name: "BURGER SCORPION", img: "img/burgas/burgerscorpion.jpg", price: "1860", description: "Esta burger tiene: 240gr de carne, BBQ garlic jalapeño, cebolla crispy, doble panceta y cuádruple cheddar y Jalapeño relleno de muzzarella especiada envuelto en panceta"},
-            {name: "BURGER NOTYOSHI", img: "img/burgas/burgernotyoshi.jpg", price: "1790", description: "Esta burger tiene: pan 100% vegano, medallon a base de plantas, notMayo, guacamole, pico de gallo y cebolla crispy"},
-            {name: "BURGER FREEZER", img: "img/burgas/burgerfreezer.jpg", price: "2300", description: "Esta burger tiene: 4 medallones de carne, 4 fetas de cheddar, panceta y salsa Stacker"},
-            {name: "BURGER GAME OVER", img: "img/burgas/burgergameover.jpg", price: "1980", description: "Esta burger tiene: 240 gramos de carne. doble panceta, doble cheddar, salsa Little Mac, lechuga, pickles agridulces y cebolla crispy"}
+            {name: "BURGER LA PIXELONETA", img: "img/burgas/burgerpixeloneta.jpg", amount:"1", price: "1980", description: "Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa"},
+            {name: "BURGER DONKEY DONUT", img: "img/burgas/burgerdonkey.jpg", amount:"1", price: "2090", description: "Esta burger tiene: 240gr de carne, doble donuts glaseadas, doble cheddar y doble panceta"},
+            {name: "BURGER SCORPION", img: "img/burgas/burgerscorpion.jpg", amount:"1", price: "1860", description: "Esta burger tiene: 240gr de carne, BBQ garlic jalapeño, cebolla crispy, doble panceta y cuádruple cheddar y Jalapeño relleno de muzzarella especiada envuelto en panceta"},
+            {name: "BURGER NOTYOSHI", img: "img/burgas/burgernotyoshi.jpg", amount:"1", price: "1790", description: "Esta burger tiene: pan 100% vegano, medallon a base de plantas, notMayo, guacamole, pico de gallo y cebolla crispy"},
+            {name: "BURGER FREEZER", img: "img/burgas/burgerfreezer.jpg", amount:"1", price: "2300", description: "Esta burger tiene: 4 medallones de carne, 4 fetas de cheddar, panceta y salsa Stacker"},
+            {name: "BURGER GAME OVER", img: "img/burgas/burgergameover.jpg", amount:"1", price: "1980", description: "Esta burger tiene: 240 gramos de carne. doble panceta, doble cheddar, salsa Little Mac, lechuga, pickles agridulces y cebolla crispy"}
         ]
 
         // Asegurarnos de que tengamos "menu" en localStorage
@@ -46,10 +46,7 @@ addEventListener('DOMContentLoaded', (event) => {
         } else {
             localStorage.setItem('menu', JSON.stringify(menu))
         }
-
-
-
-        // Funciones
+        
         const printMenu = () => { 
             menuContainer.innerHTML = ''
             for (item of menu) {
@@ -61,12 +58,12 @@ addEventListener('DOMContentLoaded', (event) => {
                             <img src="${item.img}" alt="">
         
                             <div class="card-body">
-                                <h4>${item.name}</h4>
+                                <h4 class="name">${item.name}</h4>
                                 <p class="card-text">${item.description}</p>
                                 <p class="fs-3 text-end"><b>$<span class="price" style="width: 50%;">${item.price}</span></b></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" disabled>Agregar al carrito</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary adds">Agregar al carrito</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary only-admins edits">Editar</button>
                                     </div>
                                     <small class="text-muted"></small>
@@ -76,6 +73,7 @@ addEventListener('DOMContentLoaded', (event) => {
                     </div>
                 `
             }
+
             if (localStorage.getItem('currentAdmin')) { 
                 btnIngresarIndex.style.display = 'none';
     
@@ -89,6 +87,8 @@ addEventListener('DOMContentLoaded', (event) => {
                 }
             }
         }
+        
+        // Funciones
         
         const processedImg = e => {
             let reader = new FileReader();
@@ -302,5 +302,77 @@ addEventListener('DOMContentLoaded', (event) => {
     }
 
 
+    // carrito
+    let carrito = [];
+    
+    // const addBtn = document.querySelector('.adds')
+    //     addBtn.addEventListener ("click", () => {
+    //         carrito.push({
+    //             nombre: item.name
+    //         });
+    //         console.log (carrito)
+    //     });
+    const addBtn = (e) => {
+        e.preventDefault()
+        const currentCard = e.target.parentNode.parentNode.parentNode.parentNode
+        const namecart = currentCard.querySelector(".name").textContent
+        const pricecart = Number(currentCard.querySelector(".price").textContent)
+        carrito.push(namecart)
+        // console.log(carrito)
+        mostrarCarrito()
+    }
+    const mostrarCarrito = () => {
+        const modalBody = document.querySelector(".modal .modal-body");
+        if (modalBody) {
+          modalBody.innerHTML = "";
+          carrito.forEach((prod) => {
+            const {id, name, price, img,} = prod;
+            console.log(modalBody);
+            modalBody.innerHTML += `
+            <div class="modal-contenedor">
+              <div>
+              <img class="img-fluid img-carrito" src="${item.img}"/>
+              </div>
+              <div>
+              <p>Producto: ${item.name}</p>
+              <p>Precio: ${item.price}</p>
+              <button class="btn btn-danger"  onclick="eliminarProducto()">Eliminar producto</button>
+              </div>
+            </div>
+            
+            `;
+          });
+        }
+      
+        if (carrito.length === 0) {
+          console.log("Nada");
+          modalBody.innerHTML = `
+          <p class="text-center text-primary parrafo">¡Aun no agregaste nada!</p>
+          `;
+        } else {
+          console.log("Algo");
+        }
+        
+      
+        // if (precioTotal) {
+        //   precioTotal.innerText = carrito.reduce(
+        //     (acc, prod) => acc + prod.cantidad * prod.precio,
+        //     0
+        //   );
+        // }
+      
+        // guardarStorage();
+      };
+   
+    for (const btn of document.querySelectorAll(".adds")){
+        btn.addEventListener("click", addBtn)
+    }
+
+    
+    // addBtn.addEventListener ("click", () => {
+    //     carrito.push(addBtn);
+    //     console.log (carrito)
+    // });
+    
 
 });
