@@ -57,7 +57,13 @@ addEventListener('DOMContentLoaded', (event) => {
             for (const prod of menuLocal) {
                 if (prod.name == namecart) {
                     carrito.push(prod)
-                    
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Se ha agregado al carrito',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
                 }
             }
             
@@ -340,6 +346,9 @@ addEventListener('DOMContentLoaded', (event) => {
     function eliminarProducto(e) {
         carrito = carrito.filter((prod) => ("prod" + prod.id) !== e.target.id);
         mostrarCarrito();
+        for (const btn of document.querySelectorAll(".eliminarProducto")){
+            btn.addEventListener("click", eliminarProducto)
+        }
         console.log(carrito);
     }
 
