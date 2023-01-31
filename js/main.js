@@ -316,63 +316,77 @@ addEventListener('DOMContentLoaded', (event) => {
         e.preventDefault()
         const currentCard = e.target.parentNode.parentNode.parentNode.parentNode
         const namecart = currentCard.querySelector(".name").textContent
-        const pricecart = Number(currentCard.querySelector(".price").textContent)
-        carrito.push(namecart)
-        // console.log(carrito)
-        mostrarCarrito()
-    }
-    const mostrarCarrito = () => {
-        const modalBody = document.querySelector(".modal .modal-body");
-        if (modalBody) {
-          modalBody.innerHTML = "";
-          carrito.forEach((prod) => {
-            const {id, name, price, img,} = prod;
-            console.log(modalBody);
-            modalBody.innerHTML += `
-            <div class="modal-contenedor">
-              <div>
-              <img class="img-fluid img-carrito" src="${item.img}"/>
-              </div>
-              <div>
-              <p>Producto: ${item.name}</p>
-              <p>Precio: ${item.price}</p>
-              <button class="btn btn-danger"  onclick="eliminarProducto()">Eliminar producto</button>
-              </div>
-            </div>
-            
-            `;
-          });
-        }
-      
-        if (carrito.length === 0) {
-          console.log("Nada");
-          modalBody.innerHTML = `
-          <p class="text-center text-primary parrafo">¡Aun no agregaste nada!</p>
-          `;
-        } else {
-          console.log("Algo");
+        const menuLocal = JSON.parse(localStorage.getItem("menu"))
+        for (const prod of menuLocal) {
+            if (prod.name == namecart) {
+                carrito.push(prod)
+                
+            }
         }
         
-      
+        agregarCarrito()
+    }
+    function agregarCarrito() {
+        const modalBody = document.querySelector(".modal .modal-body");
+        if (modalBody) {
+            modalBody.innerHTML = "";
+            carrito.forEach((prod) => {
+                const {id, name, price, img} = prod;
+                console.log(modalBody);
+                modalBody.innerHTML += `
+                <div class="modal-contenedor">
+                <div>
+                <img class="img-fluid img-carrito" src="${img}"/>
+                </div>
+                <div>
+                <p>Producto: ${name}</p>
+                <p>Precio: ${price}</p>
+                <button class="btn btn-danger eliminarProducto" id="${name}">Eliminar producto</button>
+                </div>
+                </div>
+                
+                `;
+            modalBody.querySelector(`#${name}`).addEventListener("click", eliminarProducto)    
+            });
+        }
+        
+        if (carrito.length === 0) {
+            console.log("Nada");
+            modalBody.innerHTML = `
+            <p class="text-center text-primary parrafo">¡Aun no agregaste nada!</p>
+            `;
+        } else {
+            console.log("Algo");
+        }
+        
+        
+        
         // if (precioTotal) {
-        //   precioTotal.innerText = carrito.reduce(
-        //     (acc, prod) => acc + prod.cantidad * prod.precio,
-        //     0
-        //   );
-        // }
-      
-        // guardarStorage();
-      };
-   
+            //   precioTotal.innerText = carrito.reduce(
+                //     (acc, prod) => acc + prod.cantidad * prod.precio,
+                //     0
+                //   );
+                // }
+                
+                // guardarStorage();
+    };
+    
+    function eliminarProducto(name) {
+        // carrito = carrito.filter((prod) => prod.name !== name);
+        //mostrarCarrito();
+        console.log("eliminar");
+    }
+            
     for (const btn of document.querySelectorAll(".adds")){
         btn.addEventListener("click", addBtn)
     }
-
     
-    // addBtn.addEventListener ("click", () => {
-    //     carrito.push(addBtn);
-    //     console.log (carrito)
-    // });
-    
+            
+            
+            // addBtn.addEventListener ("click", () => {
+                //     carrito.push(addBtn);
+                //     console.log (carrito)
+                // });
+                
 
 });
