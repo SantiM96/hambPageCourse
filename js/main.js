@@ -3,6 +3,8 @@ addEventListener('DOMContentLoaded', (event) => {
     let urlNumber = window.location.href.split("/").length
     let url = window.location.href.split("/", urlNumber)[urlNumber - 1].split("?")[0].split("#")[0]
     
+    
+    let carrito = [];
 
     // Admins
     let initialsAdmins = [
@@ -32,12 +34,12 @@ addEventListener('DOMContentLoaded', (event) => {
 
         // Menu default
         let menu = [
-            {name: "BURGER LA PIXELONETA", img: "img/burgas/burgerpixeloneta.jpg", amount:"1", price: "1980", description: "Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa"},
-            {name: "BURGER DONKEY DONUT", img: "img/burgas/burgerdonkey.jpg", amount:"1", price: "2090", description: "Esta burger tiene: 240gr de carne, doble donuts glaseadas, doble cheddar y doble panceta"},
-            {name: "BURGER SCORPION", img: "img/burgas/burgerscorpion.jpg", amount:"1", price: "1860", description: "Esta burger tiene: 240gr de carne, BBQ garlic jalapeño, cebolla crispy, doble panceta y cuádruple cheddar y Jalapeño relleno de muzzarella especiada envuelto en panceta"},
-            {name: "BURGER NOTYOSHI", img: "img/burgas/burgernotyoshi.jpg", amount:"1", price: "1790", description: "Esta burger tiene: pan 100% vegano, medallon a base de plantas, notMayo, guacamole, pico de gallo y cebolla crispy"},
-            {name: "BURGER FREEZER", img: "img/burgas/burgerfreezer.jpg", amount:"1", price: "2300", description: "Esta burger tiene: 4 medallones de carne, 4 fetas de cheddar, panceta y salsa Stacker"},
-            {name: "BURGER GAME OVER", img: "img/burgas/burgergameover.jpg", amount:"1", price: "1980", description: "Esta burger tiene: 240 gramos de carne. doble panceta, doble cheddar, salsa Little Mac, lechuga, pickles agridulces y cebolla crispy"}
+            { id: "1", name: "BURGER LA PIXELONETA", img: "img/burgas/burgerpixeloneta.jpg", amount:"1", price: "1980", description: "Esta burger tiene: 240gr de carne, pastrami grillado, huevo, lechuga, tomate, cebolla, ketchup y mayonesa"},
+            { id: "2", name: "BURGER DONKEY DONUT", img: "img/burgas/burgerdonkey.jpg", amount:"1", price: "2090", description: "Esta burger tiene: 240gr de carne, doble donuts glaseadas, doble cheddar y doble panceta"},
+            { id: "3", name: "BURGER SCORPION", img: "img/burgas/burgerscorpion.jpg", amount:"1", price: "1860", description: "Esta burger tiene: 240gr de carne, BBQ garlic jalapeño, cebolla crispy, doble panceta y cuádruple cheddar y Jalapeño relleno de muzzarella especiada envuelto en panceta"},
+            { id: "4", name: "BURGER NOTYOSHI", img: "img/burgas/burgernotyoshi.jpg", amount:"1", price: "1790", description: "Esta burger tiene: pan 100% vegano, medallon a base de plantas, notMayo, guacamole, pico de gallo y cebolla crispy"},
+            { id: "5", name: "BURGER FREEZER", img: "img/burgas/burgerfreezer.jpg", amount:"1", price: "2300", description: "Esta burger tiene: 4 medallones de carne, 4 fetas de cheddar, panceta y salsa Stacker"},
+            { id: "6", name: "BURGER GAME OVER", img: "img/burgas/burgergameover.jpg", amount:"1", price: "1980", description: "Esta burger tiene: 240 gramos de carne. doble panceta, doble cheddar, salsa Little Mac, lechuga, pickles agridulces y cebolla crispy"}
         ]
 
         // Asegurarnos de que tengamos "menu" en localStorage
@@ -45,6 +47,21 @@ addEventListener('DOMContentLoaded', (event) => {
             menu = JSON.parse(localStorage.getItem('menu'))
         } else {
             localStorage.setItem('menu', JSON.stringify(menu))
+        }
+
+        const addBtn = (e) => {
+            e.preventDefault()
+            const currentCard = e.target.parentNode.parentNode.parentNode.parentNode
+            const namecart = currentCard.querySelector(".name").textContent
+            const menuLocal = JSON.parse(localStorage.getItem("menu"))
+            for (const prod of menuLocal) {
+                if (prod.name == namecart) {
+                    carrito.push(prod)
+                    
+                }
+            }
+            
+            agregarCarrito()
         }
         
         const printMenu = () => { 
@@ -86,6 +103,10 @@ addEventListener('DOMContentLoaded', (event) => {
                     }
                 }
             }
+
+            for (const btn of document.querySelectorAll(".adds")){
+                btn.addEventListener("click", addBtn)
+            }
         }
         
         // Funciones
@@ -102,9 +123,12 @@ addEventListener('DOMContentLoaded', (event) => {
 
         const addNewItemMenu = e => { 
             e.preventDefault()
+            const newId = Number(menu[menu.length - 1])
+            
             if (imgName.value.trim() != "" && imgDescription.value.trim() != "" && imgPrice.value.trim() != "" && imgSource != "" && imgSource != undefined) { 
                 if (localStorage.getItem('currentAdmin')) {
                     let objectToAdd = {
+                        id: newId,
                         name: imgName.value.trim(),
                         description: imgDescription.value.trim(),
                         price: imgPrice.value.trim(),
@@ -303,90 +327,71 @@ addEventListener('DOMContentLoaded', (event) => {
 
 
     // carrito
-    let carrito = [];
     
-    // const addBtn = document.querySelector('.adds')
-    //     addBtn.addEventListener ("click", () => {
-    //         carrito.push({
-    //             nombre: item.name
-    //         });
-    //         console.log (carrito)
-    //     });
-    const addBtn = (e) => {
-        e.preventDefault()
-        const currentCard = e.target.parentNode.parentNode.parentNode.parentNode
-        const namecart = currentCard.querySelector(".name").textContent
-        const menuLocal = JSON.parse(localStorage.getItem("menu"))
-        for (const prod of menuLocal) {
-            if (prod.name == namecart) {
-                carrito.push(prod)
-                
-            }
-        }
-        
-        agregarCarrito()
-    }
+    
+
     function agregarCarrito() {
-        const modalBody = document.querySelector(".modal .modal-body");
-        if (modalBody) {
-            modalBody.innerHTML = "";
-            carrito.forEach((prod) => {
-                const {id, name, price, img} = prod;
-                console.log(modalBody);
-                modalBody.innerHTML += `
-                <div class="modal-contenedor">
-                <div>
-                <img class="img-fluid img-carrito" src="${img}"/>
-                </div>
-                <div>
-                <p>Producto: ${name}</p>
-                <p>Precio: ${price}</p>
-                <button class="btn btn-danger eliminarProducto" id="${name}">Eliminar producto</button>
-                </div>
-                </div>
-                
-                `;
-            modalBody.querySelector(`#${name}`).addEventListener("click", eliminarProducto)    
-            });
+        mostrarCarrito()
+        for (const btn of document.querySelectorAll(".eliminarProducto")){
+            btn.addEventListener("click", eliminarProducto)
         }
-        
-        if (carrito.length === 0) {
-            console.log("Nada");
-            modalBody.innerHTML = `
-            <p class="text-center text-primary parrafo">¡Aun no agregaste nada!</p>
-            `;
-        } else {
-            console.log("Algo");
-        }
-        
-        
-        
-        // if (precioTotal) {
-            //   precioTotal.innerText = carrito.reduce(
-                //     (acc, prod) => acc + prod.cantidad * prod.precio,
-                //     0
-                //   );
-                // }
-                
-                // guardarStorage();
     };
     
-    function eliminarProducto(name) {
-        // carrito = carrito.filter((prod) => prod.name !== name);
-        //mostrarCarrito();
-        console.log("eliminar");
+    function eliminarProducto(e) {
+        carrito = carrito.filter((prod) => ("prod" + prod.id) !== e.target.id);
+        mostrarCarrito();
+        console.log(carrito);
+    }
+
+    const mostrarCarrito = () => {
+        const modalBody = document.querySelector(".modal .modal-body");
+        let precioTotal = 0
+        modalBody.innerHTML = "";
+        carrito.forEach((prod) => {
+            const {id, name, price, img} = prod;
+            precioTotal += Number(price)
+            console.log(modalBody);
+            modalBody.innerHTML += `
+                <div class="modal-contenedor">
+                    <div>
+                        <img class="img-fluid img-carrito" src="${img}"/>
+                    </div>
+                    <div>
+                        <p>Producto: ${name}</p>
+                        <p>Precio: $${price}</p>
+                        <button class="btn btn-danger eliminarProducto" id="prod${id}">Eliminar producto</button>
+                    </div>
+                </div>
+            `;
+            modalBody.querySelector(`#prod${id}`).addEventListener("click", eliminarProducto)
+        });
+        modalBody.innerHTML += `
+            <div class="precio-total"><span>Total:</span> $${precioTotal}</div>
+        `;
     }
             
-    for (const btn of document.querySelectorAll(".adds")){
-        btn.addEventListener("click", addBtn)
-    }
-    
-            
-            
-            // addBtn.addEventListener ("click", () => {
-                //     carrito.push(addBtn);
-                //     console.log (carrito)
-                // });
+    document.querySelector(".vaciarCarrito").addEventListener("click", () => {
+        carrito = []
+        mostrarCarrito()
+    })
+    document.querySelector(".finalizarCompra").addEventListener("click", () => {
+        if (carrito.length > 0) {
+            console.log(carrito);
+            Swal.fire(
+                '¡A comeeerlaaa!',
+                'Tu compra se ha realizado con éxito',
+                'success'
+            )
+            carrito = []
+            mostrarCarrito()
+        } else {
+            Swal.fire(
+                '¡Ups!',
+                'Aún no agregaste nada',
+                'warning'
+            )
+        }
+    })
                 
 
 });

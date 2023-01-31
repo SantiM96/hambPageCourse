@@ -120,3 +120,11 @@
 .modal-content{
     background-color: #E3D8D6;
 }
+.precio-total {
+    font-size: 18px;
+    margin-top: 20px;
+    text-align: right;
+}
+.precio-total span {
+    font-weight: bold;
+}
